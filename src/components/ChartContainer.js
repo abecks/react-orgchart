@@ -5,10 +5,14 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useMemo,
-  useCallback
+  useCallback,
 } from "react";
 import PropTypes from "prop-types";
-import { dragNodeService, selectNodeService, useDebouncedState } from "./service";
+import {
+  dragNodeService,
+  selectNodeService,
+  useDebouncedState,
+} from "./service";
 import JSONDigger from "json-digger";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -42,7 +46,7 @@ const defaultProps = {
   chartClass: "",
   draggable: false,
   collapsible: true,
-  multipleSelect: false
+  multipleSelect: false,
 };
 
 const ChartContainer = forwardRef(
@@ -62,7 +66,7 @@ const ChartContainer = forwardRef(
       onClickNode,
       onClickChart,
       onZoomChange,
-      onDropNode
+      onDropNode,
     },
     ref
   ) => {
@@ -88,12 +92,16 @@ const ChartContainer = forwardRef(
     const attachRel = useCallback((data, flags) => {
       if (!!data && data.length) {
         data.forEach(function (item) {
-          attachRel(item, flags === "00" ? flags : "1" + (data.length > 1 ? 1 : 0));
+          attachRel(
+            item,
+            flags === "00" ? flags : "1" + (data.length > 1 ? 1 : 0)
+          );
         });
       }
 
-      data = Object.assign({}, data)
-      data.relationship = flags + (data.children && data.children.length > 0 ? 1 : 0);
+      data = Object.assign({}, data);
+      data.relationship =
+        flags + (data.children && data.children.length > 0 ? 1 : 0);
 
       if (data.children) {
         data.children.forEach(function (item) {
@@ -110,7 +118,7 @@ const ChartContainer = forwardRef(
 
     const dsDigger = new JSONDigger(datasource, "id", "children");
 
-    const clickChartHandler = event => {
+    const clickChartHandler = (event) => {
       if (!event.target.closest(".oc-node")) {
         if (onClickChart) {
           onClickChart();
@@ -123,7 +131,7 @@ const ChartContainer = forwardRef(
       setCursor("default");
     };
 
-    const panStartHandler = e => {
+    const panStartHandler = (e) => {
       if (e.target.closest(".oc-node")) {
         setPanning(false);
         return;
@@ -133,7 +141,7 @@ const ChartContainer = forwardRef(
         setPosition({
           ...position,
           oldX: e.clientX,
-          oldY: e.clientY
+          oldY: e.clientY,
         });
       }
     };
@@ -153,38 +161,44 @@ const ChartContainer = forwardRef(
           });
         }
       };
-      window.addEventListener('mouseup', mouseup);
-      window.addEventListener('mousemove', mousemove);
+      window.addEventListener("mouseup", mouseup);
+      window.addEventListener("mousemove", mousemove);
       return () => {
-        window.removeEventListener('mouseup', mouseup);
-        window.removeEventListener('mousemove', mousemove);
+        window.removeEventListener("mouseup", mouseup);
+        window.removeEventListener("mousemove", mousemove);
       };
     });
 
-    const zoomHandler = e => {
+    const zoomHandler = (e) => {
       if (e.deltaY) {
         const sign = Math.sign(e.deltaY) / 100;
         const scale = 1 - sign;
         const rect = container.current.getBoundingClientRect();
         const chartEl = container.current.getBoundingClientRect();
-        
+
         const targetScale = position.z * scale;
         if (targetScale > zoomoutLimit && targetScale < zoominLimit) {
           setPosition({
             ...position,
-            x: position.x * scale - (rect.width / 2 - e.clientX + rect.x) * sign,
-            y: position.y * scale - (chartEl.height * rect.width / chartEl.width / 2 - e.clientY + rect.y) * sign,
+            x:
+              position.x * scale - (rect.width / 2 - e.clientX + rect.x) * sign,
+            y:
+              position.y * scale -
+              ((chartEl.height * rect.width) / chartEl.width / 2 -
+                e.clientY +
+                rect.y) *
+                sign,
             z: targetScale,
           });
           setScale(targetScale);
         }
       }
     };
-    
+
     useEffect(() => {
       onZoomChange && onZoomChange(debouncedScale);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedScale])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedScale]);
 
     const exportPDF = (canvas, exportFilename) => {
       const canvasWidth = Math.floor(canvas.width);
@@ -192,15 +206,15 @@ const ChartContainer = forwardRef(
       const doc =
         canvasWidth > canvasHeight
           ? new jsPDF({
-            orientation: "landscape",
-            unit: "px",
-            format: [canvasWidth, canvasHeight]
-          })
+              orientation: "landscape",
+              unit: "px",
+              format: [canvasWidth, canvasHeight],
+            })
           : new jsPDF({
-            orientation: "portrait",
-            unit: "px",
-            format: [canvasHeight, canvasWidth]
-          });
+              orientation: "portrait",
+              unit: "px",
+              format: [canvasHeight, canvasWidth],
+            });
       doc.addImage(canvas.toDataURL("image/jpeg", 1.0), "JPEG", 0, 0);
       doc.save(exportFilename + ".pdf");
     };
@@ -245,9 +259,9 @@ const ChartContainer = forwardRef(
           onclone: function (clonedDoc) {
             clonedDoc.querySelector(".orgchart").style.background = "none";
             clonedDoc.querySelector(".orgchart").style.transform = "";
-          }
+          },
         }).then(
-          canvas => {
+          (canvas) => {
             if (exportFileextension.toLowerCase() === "pdf") {
               exportPDF(canvas, exportFilename);
             } else {
@@ -269,7 +283,7 @@ const ChartContainer = forwardRef(
           .querySelectorAll(
             ".oc-node.hidden, .oc-hierarchy.hidden, .isSiblingsCollapsed, .isAncestorsCollapsed"
           )
-          .forEach(el => {
+          .forEach((el) => {
             el.classList.remove(
               "hidden",
               "isSiblingsCollapsed",
@@ -279,22 +293,28 @@ const ChartContainer = forwardRef(
       },
       setZoom: (newScale) => {
         if (newScale < zoomoutLimit) {
-          newScale = zoomoutLimit
+          newScale = zoomoutLimit;
         }
         if (newScale > zoominLimit) {
           newScale = zoominLimit;
         }
-        setPosition((position) => ({ ...position, z: newScale }))
+        setPosition((position) => ({ ...position, z: newScale }));
+      },
+      setPosition: (newPosition) => {
+        setPosition((position) => ({ ...position, ...newPosition }));
       },
       getChart: () => {
         return ds.children;
       },
       resetPosition: () => {
-        setPosition({ oldX: 0, oldY: 0, x: 0, y: 0, z: 0 })
-      }
+        setPosition({ oldX: 0, oldY: 0, x: 0, y: 0, z: 0 });
+      },
     }));
 
-    const dsWithAttachedRel = useMemo(() => attachRel(ds, "00"), [attachRel, ds]);
+    const dsWithAttachedRel = useMemo(
+      () => attachRel(ds, "00"),
+      [attachRel, ds]
+    );
 
     return (
       <div
@@ -314,18 +334,20 @@ const ChartContainer = forwardRef(
           onMouseDown={pan ? panStartHandler : undefined}
         >
           <ul>
-            {!!dsWithAttachedRel && dsWithAttachedRel.length ? dsWithAttachedRel.map((_ds) => (
-              <ChartNode
-                datasource={_ds}
-                NodeTemplate={NodeTemplate}
-                draggable={draggable}
-                collapsible={collapsible}
-                multipleSelect={multipleSelect}
-                changeHierarchy={changeHierarchy}
-                onClickNode={onClickNode}
-                onDropNode={onDropNode}
-              />
-            )) : (
+            {!!dsWithAttachedRel && dsWithAttachedRel.length ? (
+              dsWithAttachedRel.map((_ds) => (
+                <ChartNode
+                  datasource={_ds}
+                  NodeTemplate={NodeTemplate}
+                  draggable={draggable}
+                  collapsible={collapsible}
+                  multipleSelect={multipleSelect}
+                  changeHierarchy={changeHierarchy}
+                  onClickNode={onClickNode}
+                  onDropNode={onDropNode}
+                />
+              ))
+            ) : (
               <ChartNode
                 datasource={dsWithAttachedRel}
                 NodeTemplate={NodeTemplate}

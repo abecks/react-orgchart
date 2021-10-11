@@ -133,7 +133,7 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
   }),
       _useState12 = _slicedToArray(_useState11, 2),
       position = _useState12[0],
-      setPosition = _useState12[1];
+      _setPosition = _useState12[1];
 
   var _useState13 = (0, _react.useState)(1),
       _useState14 = _slicedToArray(_useState13, 2),
@@ -191,7 +191,8 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
     } else {
       e.preventDefault();
       setPanning(true);
-      setPosition(_objectSpread(_objectSpread({}, position), {}, {
+
+      _setPosition(_objectSpread(_objectSpread({}, position), {}, {
         oldX: e.clientX,
         oldY: e.clientY
       }));
@@ -205,7 +206,7 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
 
     var mousemove = function mousemove(event) {
       if (panning) {
-        setPosition(_objectSpread(_objectSpread({}, position), {}, {
+        _setPosition(_objectSpread(_objectSpread({}, position), {}, {
           x: position.x + event.clientX - position.oldX,
           y: position.y + event.clientY - position.oldY,
           oldX: event.clientX,
@@ -214,11 +215,11 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
       }
     };
 
-    window.addEventListener('mouseup', mouseup);
-    window.addEventListener('mousemove', mousemove);
+    window.addEventListener("mouseup", mouseup);
+    window.addEventListener("mousemove", mousemove);
     return function () {
-      window.removeEventListener('mouseup', mouseup);
-      window.removeEventListener('mousemove', mousemove);
+      window.removeEventListener("mouseup", mouseup);
+      window.removeEventListener("mousemove", mousemove);
     };
   });
 
@@ -233,11 +234,12 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
       var targetScale = position.z * _scale;
 
       if (targetScale > zoomoutLimit && targetScale < zoominLimit) {
-        setPosition(_objectSpread(_objectSpread({}, position), {}, {
+        _setPosition(_objectSpread(_objectSpread({}, position), {}, {
           x: position.x * _scale - (rect.width / 2 - e.clientX + rect.x) * sign,
           y: position.y * _scale - (chartEl.height * rect.width / chartEl.width / 2 - e.clientY + rect.y) * sign,
           z: targetScale
         }));
+
         setScale(targetScale);
       }
     }
@@ -354,17 +356,22 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
           newScale = zoominLimit;
         }
 
-        setPosition(function (position) {
+        _setPosition(function (position) {
           return _objectSpread(_objectSpread({}, position), {}, {
             z: newScale
           });
+        });
+      },
+      setPosition: function setPosition(newPosition) {
+        _setPosition(function (position) {
+          return _objectSpread(_objectSpread({}, position), newPosition);
         });
       },
       getChart: function getChart() {
         return ds.children;
       },
       resetPosition: function resetPosition() {
-        setPosition({
+        _setPosition({
           oldX: 0,
           oldY: 0,
           x: 0,
