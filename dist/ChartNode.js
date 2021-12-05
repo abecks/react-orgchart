@@ -323,9 +323,19 @@ var ChartNode = function ChartNode(_ref) {
       nodeData: datasource
     });
   }, [datasource]);
+  var hasGrandChildren = false;
+
+  if (datasource && datasource.children.length > 0) {
+    datasource.children.forEach(function (child) {
+      if (child.children) {
+        hasGrandChildren = true;
+      }
+    });
+  }
+
   return /*#__PURE__*/_react.default.createElement("li", {
     className: (0, _classnames.default)("oc-hierarchy", {
-      "has-children": datasource.children && datasource.children.length > 0
+      "has-grandchildren": hasGrandChildren
     })
   }, /*#__PURE__*/_react.default.createElement("div", {
     ref: node,

@@ -242,10 +242,19 @@ const ChartNode = ({
     [datasource]
   );
 
+  let hasGrandChildren = false;
+  if (datasource && datasource.children.length > 0) {
+    datasource.children.forEach((child) => {
+      if (child.children) {
+        hasGrandChildren = true;
+      }
+    });
+  }
+
   return (
     <li
       className={classnames("oc-hierarchy", {
-        "has-children": datasource.children && datasource.children.length > 0,
+        "has-grandchildren": hasGrandChildren,
       })}
     >
       <div
