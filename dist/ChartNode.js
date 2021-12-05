@@ -325,7 +325,7 @@ var ChartNode = function ChartNode(_ref) {
   }, [datasource]);
   var hasGrandChildren = false;
 
-  if (datasource && datasource.children.length > 0) {
+  if (datasource.children && datasource.children.length > 0) {
     datasource.children.forEach(function (child) {
       if (child.children) {
         hasGrandChildren = true;
