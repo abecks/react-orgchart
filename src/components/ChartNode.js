@@ -243,7 +243,7 @@ const ChartNode = ({
   );
 
   let hasGrandChildren = false;
-  if (datasource && datasource.children.length > 0) {
+  if (datasource.children && datasource.children.length > 0) {
     datasource.children.forEach((child) => {
       if (child.children) {
         hasGrandChildren = true;
