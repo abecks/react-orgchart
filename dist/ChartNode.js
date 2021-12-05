@@ -15,6 +15,8 @@ var _service = require("./service");
 
 require("./ChartNode.css");
 
+var _classnames = _interopRequireDefault(require("classnames"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -322,7 +324,9 @@ var ChartNode = function ChartNode(_ref) {
     });
   }, [datasource]);
   return /*#__PURE__*/_react.default.createElement("li", {
-    className: "oc-hierarchy"
+    className: (0, _classnames.default)("oc-hierarchy", {
+      "has-children": datasource.children && datasource.children.length > 0
+    })
   }, /*#__PURE__*/_react.default.createElement("div", {
     ref: node,
     id: datasource.id,
