@@ -324,8 +324,10 @@ var ChartNode = function ChartNode(_ref) {
     });
   }, [datasource]);
   var hasGrandChildren = false;
+  var manyChildren = false;
 
   if (datasource.children && datasource.children.length > 0) {
+    manyChildren = datasource.children.length > 0;
     datasource.children.forEach(function (child) {
       if (child.children) {
         hasGrandChildren = true;
@@ -335,7 +337,9 @@ var ChartNode = function ChartNode(_ref) {
 
   return /*#__PURE__*/_react.default.createElement("li", {
     className: (0, _classnames.default)("oc-hierarchy", {
-      "has-grandchildren": hasGrandChildren
+      "has-grandchildren": hasGrandChildren,
+      "no-grandchildren": !hasGrandChildren,
+      "many-children": manyChildren
     })
   }, /*#__PURE__*/_react.default.createElement("div", {
     ref: node,
