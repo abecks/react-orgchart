@@ -326,13 +326,15 @@ const ChartContainer = forwardRef(
         onWheel={zoom ? zoomHandler : undefined}
         onMouseUp={pan && panning ? panEndHandler : undefined}
         onMouseDown={pan ? panStartHandler : undefined}
+        style={{
+          cursor: cursor,
+        }}
       >
         <div
           ref={chart}
           className={"orgchart " + chartClass}
           style={{
             transform: `translate(${position.x}px, ${position.y}px) scale(${position.z})`,
-            cursor: cursor,
           }}
           onClick={clickChartHandler}
         >

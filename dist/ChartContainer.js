@@ -398,13 +398,15 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
     className: "orgchart-container" + containerClass,
     onWheel: zoom ? zoomHandler : undefined,
     onMouseUp: pan && panning ? panEndHandler : undefined,
-    onMouseDown: pan ? panStartHandler : undefined
+    onMouseDown: pan ? panStartHandler : undefined,
+    style: {
+      cursor: cursor
+    }
   }, /*#__PURE__*/_react.default.createElement("div", {
     ref: chart,
     className: "orgchart " + chartClass,
     style: {
-      transform: "translate(".concat(position.x, "px, ").concat(position.y, "px) scale(").concat(position.z, ")"),
-      cursor: cursor
+      transform: "translate(".concat(position.x, "px, ").concat(position.y, "px) scale(").concat(position.z, ")")
     },
     onClick: clickChartHandler
   }, /*#__PURE__*/_react.default.createElement("ul", null, !!dsWithAttachedRel && dsWithAttachedRel.length ? dsWithAttachedRel.map(function (_ds) {
