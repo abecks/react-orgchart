@@ -143,7 +143,12 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
       setScale = _useState14[1];
 
   var debouncedScale = (0, _service.useDebouncedState)(scale);
-  var throttledScale = (0, _throttle.useThrottle)(scale);
+
+  var _useThrottle = (0, _throttle.useThrottle)(scale),
+      _useThrottle2 = _slicedToArray(_useThrottle, 2),
+      throttledScale = _useThrottle2[0],
+      setThrottledScale = _useThrottle2[1];
+
   var attachRel = (0, _react.useCallback)(function (data, flags) {
     if (!!data && data.length) {
       data.forEach(function (item) {
@@ -244,6 +249,7 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
         }));
 
         setScale(targetScale);
+        setThrottledScale(targetScale);
       }
     }
   };

@@ -89,7 +89,7 @@ const ChartContainer = forwardRef(
     });
     const [scale, setScale] = useState(1);
     const debouncedScale = useDebouncedState(scale);
-    const throttledScale = useThrottle(scale);
+    const [throttledScale, setThrottledScale] = useThrottle(scale);
 
     const attachRel = useCallback((data, flags) => {
       if (!!data && data.length) {
@@ -193,6 +193,7 @@ const ChartContainer = forwardRef(
             z: targetScale,
           });
           setScale(targetScale);
+          setThrottledScale(targetScale);
         }
       }
     };
