@@ -322,9 +322,10 @@ const ChartContainer = forwardRef(
     return (
       <div
         ref={container}
-        className={"orgchart-container " + containerClass}
+        className={"orgchart-container" + containerClass}
         onWheel={zoom ? zoomHandler : undefined}
         onMouseUp={pan && panning ? panEndHandler : undefined}
+        onMouseDown={pan ? panStartHandler : undefined}
       >
         <div
           ref={chart}
@@ -334,7 +335,6 @@ const ChartContainer = forwardRef(
             cursor: cursor,
           }}
           onClick={clickChartHandler}
-          onMouseDown={pan ? panStartHandler : undefined}
         >
           <ul>
             {!!dsWithAttachedRel && dsWithAttachedRel.length ? (

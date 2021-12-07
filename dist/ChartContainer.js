@@ -395,9 +395,10 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
   }, [attachRel, ds]);
   return /*#__PURE__*/_react.default.createElement("div", {
     ref: container,
-    className: "orgchart-container " + containerClass,
+    className: "orgchart-container" + containerClass,
     onWheel: zoom ? zoomHandler : undefined,
-    onMouseUp: pan && panning ? panEndHandler : undefined
+    onMouseUp: pan && panning ? panEndHandler : undefined,
+    onMouseDown: pan ? panStartHandler : undefined
   }, /*#__PURE__*/_react.default.createElement("div", {
     ref: chart,
     className: "orgchart " + chartClass,
@@ -405,8 +406,7 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
       transform: "translate(".concat(position.x, "px, ").concat(position.y, "px) scale(").concat(position.z, ")"),
       cursor: cursor
     },
-    onClick: clickChartHandler,
-    onMouseDown: pan ? panStartHandler : undefined
+    onClick: clickChartHandler
   }, /*#__PURE__*/_react.default.createElement("ul", null, !!dsWithAttachedRel && dsWithAttachedRel.length ? dsWithAttachedRel.map(function (_ds) {
     return /*#__PURE__*/_react.default.createElement(_ChartNode.default, {
       datasource: _ds,
