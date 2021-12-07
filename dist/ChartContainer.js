@@ -149,14 +149,7 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
       throttledScale = _useThrottle2[0],
       setThrottledScale = _useThrottle2[1];
 
-  var attachRel = (0, _react.useCallback)(function (data, flags) {
-    if (!!data && data.length) {
-      data.forEach(function (item) {
-        attachRel(item, flags === "00" ? flags : "1" + (data.length > 1 ? 1 : 0));
-      });
-    }
-
-    data = Object.assign({}, data);
+  var attachRel = function attachRel(data, flags) {
     data.relationship = flags + (data.children && data.children.length > 0 ? 1 : 0);
 
     if (data.children) {
@@ -166,7 +159,7 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
     }
 
     return data;
-  }, []);
+  };
 
   var _useState15 = (0, _react.useState)(datasource),
       _useState16 = _slicedToArray(_useState15, 2),
@@ -390,9 +383,6 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
       }
     };
   });
-  var dsWithAttachedRel = (0, _react.useMemo)(function () {
-    return attachRel(ds, "00");
-  }, [attachRel, ds]);
   return /*#__PURE__*/_react.default.createElement("div", {
     ref: container,
     className: "orgchart-container" + containerClass,
@@ -409,19 +399,8 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
       transform: "translate(".concat(position.x, "px, ").concat(position.y, "px) scale(").concat(position.z, ")")
     },
     onClick: clickChartHandler
-  }, /*#__PURE__*/_react.default.createElement("ul", null, !!dsWithAttachedRel && dsWithAttachedRel.length ? dsWithAttachedRel.map(function (_ds) {
-    return /*#__PURE__*/_react.default.createElement(_ChartNode.default, {
-      datasource: _ds,
-      NodeTemplate: NodeTemplate,
-      draggable: draggable,
-      collapsible: collapsible,
-      multipleSelect: multipleSelect,
-      changeHierarchy: changeHierarchy,
-      onClickNode: onClickNode,
-      onDropNode: onDropNode
-    });
-  }) : /*#__PURE__*/_react.default.createElement(_ChartNode.default, {
-    datasource: dsWithAttachedRel,
+  }, /*#__PURE__*/_react.default.createElement("ul", null, /*#__PURE__*/_react.default.createElement(_ChartNode.default, {
+    datasource: attachRel(ds, "00"),
     NodeTemplate: NodeTemplate,
     draggable: draggable,
     collapsible: collapsible,

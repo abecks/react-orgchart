@@ -91,27 +91,16 @@ const ChartContainer = forwardRef(
     const debouncedScale = useDebouncedState(scale);
     const [throttledScale, setThrottledScale] = useThrottle(scale);
 
-    const attachRel = useCallback((data, flags) => {
-      if (!!data && data.length) {
-        data.forEach(function (item) {
-          attachRel(
-            item,
-            flags === "00" ? flags : "1" + (data.length > 1 ? 1 : 0)
-          );
-        });
-      }
-
-      data = Object.assign({}, data);
+    const attachRel = (data, flags) => {
       data.relationship =
         flags + (data.children && data.children.length > 0 ? 1 : 0);
-
       if (data.children) {
         data.children.forEach(function (item) {
           attachRel(item, "1" + (data.children.length > 1 ? 1 : 0));
         });
       }
       return data;
-    }, []);
+    };
 
     const [ds, setDS] = useState(datasource);
     useEffect(() => {
@@ -314,11 +303,6 @@ const ChartContainer = forwardRef(
       },
     }));
 
-    const dsWithAttachedRel = useMemo(
-      () => attachRel(ds, "00"),
-      [attachRel, ds]
-    );
-
     return (
       <div
         ref={container}
@@ -339,31 +323,16 @@ const ChartContainer = forwardRef(
           onClick={clickChartHandler}
         >
           <ul>
-            {!!dsWithAttachedRel && dsWithAttachedRel.length ? (
-              dsWithAttachedRel.map((_ds) => (
-                <ChartNode
-                  datasource={_ds}
-                  NodeTemplate={NodeTemplate}
-                  draggable={draggable}
-                  collapsible={collapsible}
-                  multipleSelect={multipleSelect}
-                  changeHierarchy={changeHierarchy}
-                  onClickNode={onClickNode}
-                  onDropNode={onDropNode}
-                />
-              ))
-            ) : (
-              <ChartNode
-                datasource={dsWithAttachedRel}
-                NodeTemplate={NodeTemplate}
-                draggable={draggable}
-                collapsible={collapsible}
-                multipleSelect={multipleSelect}
-                changeHierarchy={changeHierarchy}
-                onClickNode={onClickNode}
-                onDropNode={onDropNode}
-              />
-            )}
+            <ChartNode
+              datasource={attachRel(ds, "00")}
+              NodeTemplate={NodeTemplate}
+              draggable={draggable}
+              collapsible={collapsible}
+              multipleSelect={multipleSelect}
+              changeHierarchy={changeHierarchy}
+              onClickNode={onClickNode}
+              onDropNode={onDropNode}
+            />
           </ul>
         </div>
         <a
