@@ -23,6 +23,8 @@ var _ChartNode = _interopRequireDefault(require("./ChartNode"));
 
 require("./ChartContainer.css");
 
+var _throttle = require("@react-hook/throttle");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -141,6 +143,7 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
       setScale = _useState14[1];
 
   var debouncedScale = (0, _service.useDebouncedState)(scale);
+  var throttledScale = (0, _throttle.useThrottle)(scale);
   var attachRel = (0, _react.useCallback)(function (data, flags) {
     if (!!data && data.length) {
       data.forEach(function (item) {
@@ -246,8 +249,8 @@ var ChartContainer = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
   };
 
   (0, _react.useEffect)(function () {
-    onZoomChange && onZoomChange(debouncedScale); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedScale]);
+    onZoomChange && onZoomChange(throttledScale); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [throttledScale]);
 
   var exportPDF = function exportPDF(canvas, exportFilename) {
     var canvasWidth = Math.floor(canvas.width);

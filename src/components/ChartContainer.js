@@ -18,6 +18,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import ChartNode from "./ChartNode";
 import "./ChartContainer.css";
+import { useThrottle } from "@react-hook/throttle";
 
 const propTypes = {
   datasource: PropTypes.object.isRequired,
@@ -88,6 +89,7 @@ const ChartContainer = forwardRef(
     });
     const [scale, setScale] = useState(1);
     const debouncedScale = useDebouncedState(scale);
+    const throttledScale = useThrottle(scale);
 
     const attachRel = useCallback((data, flags) => {
       if (!!data && data.length) {
@@ -196,9 +198,9 @@ const ChartContainer = forwardRef(
     };
 
     useEffect(() => {
-      onZoomChange && onZoomChange(debouncedScale);
+      onZoomChange && onZoomChange(throttledScale);
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedScale]);
+    }, [throttledScale]);
 
     const exportPDF = (canvas, exportFilename) => {
       const canvasWidth = Math.floor(canvas.width);
